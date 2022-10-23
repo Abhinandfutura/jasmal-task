@@ -39,6 +39,7 @@ export default Footer;
 const NoteContainer = styled.div`
   width: 100%;
   text-align: center;
+  padding: 0px 30px;
 `;
 const Note = styled.span`
   margin: auto;

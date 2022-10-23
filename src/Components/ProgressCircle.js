@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -28,7 +28,8 @@ function CircularProgressWithLabel(props) {
           component="div"
           color="text.secondary"
         >
-          {props.isVal && props.total ? Math.round(props.value) : props.value}
+          {props.isVal ? Math.round(props.value) : props.score}
+
           {props.isVal ? "%" : ""}
         </Typography1>
       </Box>
@@ -46,10 +47,10 @@ CircularProgressWithLabel.propTypes = {
 };
 
 export default function CircularStatic(props) {
-  const { percent, isVal, total } = props;
+  const { percent, isVal, score } = props;
 
   return (
-    <CircularProgressWithLabel value={percent} isVal={isVal} total={total} />
+    <CircularProgressWithLabel value={percent} isVal={isVal} score={score} />
   );
 }
 
@@ -57,6 +58,10 @@ const CircularProgress1 = styled(CircularProgress)`
   && {
     height: 90px !important;
     width: 90px !important;
+    @media (max-width: 580px) {
+      height: 71px !important;
+      width: 71px !important;
+    }
   }
 `;
 

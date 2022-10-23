@@ -67,19 +67,19 @@ function Home() {
     PassResult(time);
   }
 
-  useEffect(() => {
-    let timer = setInterval(() => {
-      setTime((time) => {
-        if (time === 0) {
-          PassResult(time);
-          return 0;
-        } else return time - 1;
-      });
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, [time]);
+  // useEffect(() => {
+  //   let timer = setInterval(() => {
+  //     setTime((time) => {
+  //       if (time === 0) {
+  //         PassResult(time);
+  //         return 0;
+  //       } else return time - 1;
+  //     });
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [time]);
 
   return (
     <Container>
@@ -177,6 +177,7 @@ const Right = styled.div`
   height: 430px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
   width: 100%;
 `;
 
@@ -192,9 +193,13 @@ const StyledButon = styled(Button)`
 `;
 const Question = styled.span`
   color: #333333;
-  min-width: 29em;
+
   word-break: break-all;
-  font-size: 20px; ;
+  font-size: 20px;
+  font-weight: bold;
+  @media (max-width: 784px) {
+    font-size: 17px;
+  }
 `;
 
 const QuestionNum = styled.span`
@@ -218,8 +223,9 @@ const Container2 = styled.div`
   column-gap: 100px;
   grid-template-columns: 1fr 1fr;
 
-  @media (max-width: 864px) {
+  @media (max-width: 974px) {
     grid-template-columns: 1fr;
+    row-gap: 30px;
   }
 `;
 const Container = styled.div`

@@ -30,6 +30,15 @@ const SubjectTxt = styled.h4`
   font-size: 24px;
   text-align: center;
   color: #333333;
+  @media (max-width: 864px) {
+    font-size: 18px;
+  }
+  @media (max-width: 680px) {
+    font-size: 14px;
+  }
+  @media (max-width: 484px) {
+    font-size: 12px;
+  }
 `;
 const Logo = styled.img`
   width: 100%;

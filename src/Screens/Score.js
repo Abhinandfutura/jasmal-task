@@ -9,21 +9,31 @@ function Score() {
   let score;
   let total;
   let percent;
+  let wrongInperce;
   let wrong;
+  let skippedInperce;
   let skipped;
   let time;
   let totalTime;
+  let correctMarkInPerce;
+
   const navigate = useNavigate();
   const location = useLocation();
   // console.log(location);
 
   if (location.state) {
     score = location.state.marks;
+
     totalTime = location.state.totalTime;
     time = totalTime - location.state.time;
     total = location.state.total;
+
+    correctMarkInPerce = (score / total) * 100;
     wrong = location.state.wrongAnswer;
+    wrongInperce = (location.state.wrongAnswer / total) * 100;
     skipped = location.state.skipped;
+    skippedInperce = (location.state.skipped / total) * 100;
+
     percent = (score / total) * 100;
   }
 
@@ -62,19 +72,31 @@ function Score() {
             </ProgressContainer>
             <ProgressContainer>
               <div>
-                <ProgressCircle percent={score} total={total} />
+                <ProgressCircle
+                  percent={correctMarkInPerce}
+                  total={total}
+                  score={score}
+                />
               </div>
               <ProTXt>Correct</ProTXt>
             </ProgressContainer>
             <ProgressContainer>
               <div>
-                <ProgressCircle percent={wrong} total={total} />
+                <ProgressCircle
+                  percent={wrongInperce}
+                  total={total}
+                  score={wrong}
+                />
               </div>
               <ProTXt>Wrong</ProTXt>
             </ProgressContainer>
             <ProgressContainer>
               <div>
-                <ProgressCircle percent={skipped} total={total} />
+                <ProgressCircle
+                  percent={skippedInperce}
+                  total={total}
+                  score={skipped}
+                />
               </div>
               <ProTXt>Skipped</ProTXt>
             </ProgressContainer>
@@ -148,6 +170,9 @@ const ProTXt = styled.span`
   font-weight: 600;
   font-size: 16px;
   text-align: center;
+  @media (max-width: 580px) {
+    font-size: 14px;
+  }
 `;
 
 const ProgressContainer = styled.div`
@@ -159,7 +184,11 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 80%; ;
+  width: 80%;
+  @media (max-width: 496px) {
+    width: 100%;
+    gap: 10px;
+  }
 `;
 const Total = styled.h5`
   font-weight: 700;
@@ -170,6 +199,9 @@ const Percentage = styled.h3`
   font-weight: 700;
   font-size: 34px;
   color: #2b7df7;
+  @media (max-width: 580px) {
+    font-size: 27px;
+  }
 `;
 const Left = styled.div`
   display: flex;
@@ -177,19 +209,26 @@ const Left = styled.div`
   gap: 5px;
 `;
 const Score1 = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  @media (max-width: 496px) {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+    place-items: center;
+  }
 `;
 const Container = styled.div`
   min-height: 100vh;
   display: flex;
+  padding: 30px;
   align-items: center;
   justify-content: center;
   background-color: #e5e5e5;
   width: 100%;
 `;
 const Container2 = styled.div`
-  width: 910px;
+  max-width: 910px;
   padding: 20px;
   background-color: white;
+  border-radius: 4px;
 `;
