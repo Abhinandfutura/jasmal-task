@@ -67,19 +67,19 @@ function Home() {
     PassResult(time);
   }
 
-  // useEffect(() => {
-  //   let timer = setInterval(() => {
-  //     setTime((time) => {
-  //       if (time === 0) {
-  //         PassResult(time);
-  //         return 0;
-  //       } else return time - 1;
-  //     });
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [time]);
+  useEffect(() => {
+    let timer = setInterval(() => {
+      setTime((time) => {
+        if (time === 0) {
+          PassResult(time);
+          return 0;
+        } else return time - 1;
+      });
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [time]);
 
   return (
     <Container>
