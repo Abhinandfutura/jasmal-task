@@ -2,7 +2,35 @@ import { Button } from "@mui/material";
 import React from "react";
 import styled from "styled-components/macro";
 import ProgressCircle from "../Components/ProgressCircle";
+import { useLocation, useNavigate } from "react-router-dom";
+import data from "../Components/data.json";
+
 function Score() {
+  let score;
+  let total;
+  let percent;
+  let wrong;
+  let skipped;
+  let time;
+  let totalTime;
+  const navigate = useNavigate();
+  const location = useLocation();
+  // console.log(location);
+
+  if (location.state) {
+    score = location.state.marks;
+    totalTime = location.state.totalTime;
+    time = totalTime - location.state.time;
+    total = location.state.total;
+    wrong = location.state.wrongAnswer;
+    skipped = location.state.skipped;
+    percent = (score / total) * 100;
+  }
+
+  const redirectToHome = () => {
+    navigate("/");
+  };
+
   return (
     <Container>
       <Container2>
@@ -10,40 +38,43 @@ function Score() {
           <Left>
             <div>
               <span>Score :</span>
-              <span style={{ fontWeight: "bold" }}> 350</span>
-              <span>/400 </span>
+              <span style={{ fontWeight: "bold" }}> {score}</span>
+              <span>/{total} </span>
             </div>
             <div>
-              <span>Score :</span>
-              <span style={{ fontWeight: "bold" }}> 04:20</span>
+              <span>Time :</span>
+              <span style={{ fontWeight: "bold" }}>
+                {`${Math.floor(time / 60)}`.padStart(2, 0)}:
+                {`${time % 60}`.padStart(2, 0)}
+              </span>
             </div>
             <div>
-              <Percentage>80%</Percentage>
+              <Percentage>{Math.round(percent)}%</Percentage>
               <Total>Total Score</Total>
             </div>
           </Left>
           <Right>
             <ProgressContainer>
               <div>
-                <ProgressCircle />
+                <ProgressCircle percent={percent} isVal={true} total={total} />
               </div>
               <ProTXt>Final Score</ProTXt>
             </ProgressContainer>
             <ProgressContainer>
               <div>
-                <ProgressCircle />
+                <ProgressCircle percent={score} total={total} />
               </div>
               <ProTXt>Correct</ProTXt>
             </ProgressContainer>
             <ProgressContainer>
               <div>
-                <ProgressCircle />
+                <ProgressCircle percent={wrong} total={total} />
               </div>
               <ProTXt>Wrong</ProTXt>
             </ProgressContainer>
             <ProgressContainer>
               <div>
-                <ProgressCircle />
+                <ProgressCircle percent={skipped} total={total} />
               </div>
               <ProTXt>Skipped</ProTXt>
             </ProgressContainer>
@@ -51,15 +82,27 @@ function Score() {
         </Score1>
 
         <Footer1>
-          <Note>Your scribble notes:</Note>
-          <p style={{ wordBreak: "break-all", marginTop: "10px" }}>
-            Loremmmmmmmmmmjhbhjkjkjbjj,nksfnkanfklafnkasnn
-            ,kjnkjsfnkjanfkjsanfksfkjnkjnkjdsnkkkkkkkkkkkkkkkkkkkkkkkkkkkkk;;;;lkhkj
-            lknafkjcasfkjaskjcbskj alkscnsaklcnkjasckjb .,mncvskjsancvkjsb
-            jhjhhjhjvvvkjhjkhjkhkjsjhc
-          </p>
+          {/* <Note>Your scribble notes:</Note> */}
+          {data.map((i, index) => (
+            <>
+              {index + 1} .<Note>{i.title}</Note>
+              <p
+                style={{
+                  fontSize: "13px",
+                  marginBottom: "10px",
+                  marginTop: "5px",
+                  color: "green",
+                  fontWeight: "bold",
+                }}
+              >
+                ഉ : {i.options[i.correctOptiionIndex]}
+              </p>
+            </>
+          ))}
         </Footer1>
-        <StyledButon variant="outlined">Exit</StyledButon>
+        <StyledButon variant="outlined" onClick={redirectToHome}>
+          Exit
+        </StyledButon>
       </Container2>
     </Container>
   );
@@ -76,7 +119,7 @@ const StyledButon = styled(Button)`
   }
 `;
 const Note = styled.span`
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 600;
   color: #333333;
 `;
@@ -85,6 +128,19 @@ const Footer1 = styled.div`
   border: 1px solid #cac8c8;
   padding: 20px 20px 10px 20px;
   margin-top: 30px;
+  height: 313px;
+  overflow-y: scroll;
+  ::-webkit-scrollbar-thumb {
+    background-color: blueviolet;
+    border-radius: 50px;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 50px;
+  }
 `;
 
 const ProTXt = styled.span`

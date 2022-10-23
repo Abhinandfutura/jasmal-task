@@ -12,6 +12,7 @@ const SignUp = lazy(() => import("../src/Screens/SignUp"));
 const Navigation = lazy(() => import("../src/Components/Navigation"));
 const SignIn = lazy(() => import("../src/Screens/SignIn"));
 function App() {
+  const isAuth = true;
   return (
     <Suspense
       fallback={
@@ -22,9 +23,14 @@ function App() {
     >
       <Router>
         <Switch>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/*" element={<Navigation />} />
+          {isAuth ? (
+            <Route path="/*" element={<Navigation />} />
+          ) : (
+            <>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />{" "}
+            </>
+          )}
         </Switch>
       </Router>
     </Suspense>

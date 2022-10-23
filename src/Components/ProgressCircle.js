@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -28,7 +28,8 @@ function CircularProgressWithLabel(props) {
           component="div"
           color="text.secondary"
         >
-          {`${Math.round(props.value)}%`}
+          {props.isVal && props.total ? Math.round(props.value) : props.value}
+          {props.isVal ? "%" : ""}
         </Typography1>
       </Box>
     </Box>
@@ -44,25 +45,11 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function CircularStatic() {
-  const [progress, setProgress] = useState(10);
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setProgress((prevProgress) =>
-  //       prevProgress >= 100 ? 0 : prevProgress + 10
-  //     );
-  //   }, 800);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
+export default function CircularStatic(props) {
+  const { percent, isVal, total } = props;
 
   return (
-    <CircularProgressWithLabel
-      //  value={progress}
-      value="90"
-    />
+    <CircularProgressWithLabel value={percent} isVal={isVal} total={total} />
   );
 }
 

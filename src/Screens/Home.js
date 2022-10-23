@@ -1,47 +1,129 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import data from "../Components/data.json";
 import WarningPopup from "../Components/WarningPopup";
 import { TextareaAutosize } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+  let totalTime = 200;
+  const [time, setTime] = useState(totalTime);
+
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (correctQuestionIndex === 0) {
+      setOpen(true);
+    }
+  };
+
+  const navigate = useNavigate();
+  const [correctQuestionIndex, setCorrectQuestionIndex] = useState(0);
+  // const [markedAnswers, setMarkedAnswers] = useState(new Array(data.length));
+
+  const total = data.length;
+  const [checkItem, setCheckItem] = useState();
+  const isQuestionEnd = correctQuestionIndex === data.length;
+  const [allAnswer, setAllAnswer] = useState(0);
+  let [checkedIndex, setCheckedIndex] = useState("");
+  let [wrongAnswer, setWrongAnswers] = useState(0);
+  let [skipped, setSkipped] = useState(0);
+
+  console.log("skipped", skipped);
+  const PassResult = (time) => {
+    navigate("/score", {
+      state: {
+        marks: allAnswer,
+        total: total,
+        wrongAnswer: wrongAnswer,
+        skipped: skipped,
+        time: time,
+        totalTime: totalTime,
+      },
+    });
+  };
+
+  const changeQuestion = (CrtIndex) => {
+    if (checkedIndex) {
+      if (CrtIndex == checkedIndex) {
+        setAllAnswer(allAnswer + 1);
+      } else {
+        setWrongAnswers(wrongAnswer + 1);
+      }
+    } else if (CrtIndex && checkedIndex === "") {
+      setSkipped(skipped + 1);
+    }
+    setCorrectQuestionIndex(correctQuestionIndex + 1);
+    setCheckedIndex("");
+  };
+
+  const checkHandle = (name, index) => {
+    setCheckItem(name);
+
+    setCheckedIndex(index);
+  };
+  if (isQuestionEnd) {
+    PassResult(time);
+  }
+
+  useEffect(() => {
+    let timer = setInterval(() => {
+      setTime((time) => {
+        if (time === 0) {
+          PassResult(time);
+          return 0;
+        } else return time - 1;
+      });
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [time]);
 
   return (
     <Container>
-      <TimeTxt>02:20</TimeTxt>
+      <TimeTxt>
+        {`${Math.floor(time / 60)}`.padStart(2, 0)}:
+        {`${time % 60}`.padStart(2, 0)}
+      </TimeTxt>
       <Container2>
         <Left>
-          <QuestionNum>Question 3 of 3</QuestionNum>
+          <QuestionNum>
+            Question {correctQuestionIndex + 1} of {data.length}
+          </QuestionNum>
 
           <Question>
-            Loremmmmmmmmmmjhbhjcgajsdkjdcskjckdsjhc
-            kjdsbcvkdbkjbckjdskjbvkjdskjvdksjvdkjvjdbvjkdbkvbdjkvbdjkvbkjdbjdfbvjdfbvjkdfvjkdfbvkjdfbvkjbjkdbjkb
+            {data[correctQuestionIndex].title
+              ? data[correctQuestionIndex].title
+              : ""}
           </Question>
           <div>
-            <div>
-              <Checkbox id="answer1" />
-              <Label for="answer1">Answer1</Label>
-            </div>
-            <div>
-              <Checkbox id="answer2" />
-              <Label for="answer2">Answer2</Label>
-            </div>
-            <div>
-              <Checkbox id="answer3" />
-              <Label for="answer3">Answer3</Label>
-            </div>
-            <div>
-              <Checkbox id="answer4" />
-              <Label for="answer4">Answer4</Label>
-            </div>
+            {data[correctQuestionIndex].options.map((i, index) => (
+              <div key={i}>
+                <Checkbox
+                  id={index}
+                  name={i}
+                  onChange={() => checkHandle(i, index)}
+                  checked={checkItem === i}
+                />
+                <Label for={index}>{i}</Label>
+              </div>
+            ))}
           </div>
           <ButtonContainer>
             <StyledButon variant="outlined" onClick={handleOpen}>
-              Exit
+              {correctQuestionIndex === 0 ? "Exit" : "Back"}
             </StyledButon>
-            <StyledButon variant="contained">Next</StyledButon>
+
+            <StyledButon
+              variant="contained"
+              onClick={() =>
+                changeQuestion(data[correctQuestionIndex].correctOptiionIndex)
+              }
+            >
+              {correctQuestionIndex === data.length - 1 ? "Submit" : "Next"}
+            </StyledButon>
           </ButtonContainer>
         </Left>
         <Right>
@@ -53,7 +135,16 @@ function Home() {
         </Right>
       </Container2>
 
-      <WarningPopup open={open} setOpen={setOpen} />
+      <WarningPopup
+        open={open}
+        setOpen={setOpen}
+        marks={allAnswer}
+        total={total}
+        wrongAnswer={wrongAnswer}
+        skipped={skipped}
+        time={time}
+        totalTime={totalTime}
+      />
     </Container>
   );
 }

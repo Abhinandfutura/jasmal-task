@@ -6,7 +6,7 @@ function Header() {
       <LogoContainer>
         <Logo src={require("../Components/images/Logo.jpg")} />
       </LogoContainer>
-      <SubjectTxt>EXAM CATEGORY: PHYSICS</SubjectTxt>
+      <SubjectTxt>EXAM CATEGORY: LSS MODEL QUESTIONS</SubjectTxt>
       <RightContainer>
         <LogoContainer>
           <Logo src={require("../Components/images/bell.png")} />

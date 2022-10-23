@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -17,11 +18,23 @@ const style = {
 };
 
 export default function BasicModal(props) {
-  const { open, setOpen } = props;
-  //   const [open, setOpen] = React.useState(false);
-  //   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
+  const { open, setOpen, marks, total, wrongAnswer, skipped, time, totalTime } =
+    props;
+  const navigate = useNavigate();
   const handleClose = () => setOpen(false);
+
+  const navigateToScore = () => {
+    navigate("/score", {
+      state: {
+        marks: marks,
+        total: total,
+        wrongAnswer: wrongAnswer,
+        skipped: skipped,
+        time: time,
+        totalTime: totalTime,
+      },
+    });
+  };
   return (
     <div>
       <Modal
@@ -40,7 +53,9 @@ export default function BasicModal(props) {
           <p style={{ textAlign: "center" }}>
             Are you sure, you want to submit the exam?{" "}
           </p>
-          <StyledButon variant="contained">Continue</StyledButon>
+          <StyledButon variant="contained" onClick={navigateToScore}>
+            Continue
+          </StyledButon>
         </Boxx>
       </Modal>
     </div>

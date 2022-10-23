@@ -20,7 +20,7 @@ function Navigation() {
       >
         <Routes>
           <Switch>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/score" element={<Score />} />
           </Switch>
         </Routes>
